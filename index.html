@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BTB Terminal</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="terminal-container">
+        <div id="notification-container" class="notification-container"></div>
+        
+        <header class="terminal-header">
+            <div class="header-left">
+                <div class="logo-container">
+                    <img src="e-cell.png" alt="E-Cell Logo" class="ecell-logo">
+                    <h1><span class="logo-part">BTB</span> Terminal</h1>
+                </div>
+                <div class="market-status">
+                    <span class="status-indicator"></span>
+                    <span>Market Open</span>
+                </div>
+            </div>
+            
+            <div class="ticker-container">
+                <div class="stock-ticker"></div>
+            </div>
+            
+            <div class="header-right">
+                <div id="budget-tracker" class="budget-display">
+                    <i class="fas fa-wallet"></i>
+                    <span>₹1,000,000.00</span>
+                </div>
+                <div class="nifty-container">
+                    <div class="nifty-label">NIFTY 10</div>
+                    <div class="nifty-ticker"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <aside class="left-panel">
+            </aside>
+
+            <main class="center-panel">
+                <nav class="content-tabs">
+                    <ul>
+                        <li class="tab active" data-tab="positions">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Positions</span>
+                        </li>
+                        <li class="tab" data-tab="orders">
+                            <i class="fas fa-list"></i>
+                            <span>Orders</span>
+                        </li>
+                        <li class="tab" data-tab="bids">
+                            <i class="fas fa-handshake"></i>
+                            <span>Bids</span>
+                        </li>
+                        <li class="tab" data-tab="charts">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>Charts</span>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="tab-content">
+                    <section id="positions-tab" class="tab-pane active">
+                        <div class="table-header">
+                            <h2>Your Positions</h2>
+                            <div class="table-actions">
+                                <button class="refresh-btn">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="positions-table-container"></div>
+                    </section>
+
+                    <section id="orders-tab" class="tab-pane">
+                        <div class="table-header">
+                            <h2>Order History</h2>
+                            <div class="table-actions">
+                                <button class="refresh-btn">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="orders-table-container"></div>
+                    </section>
+
+                    <section id="bids-tab" class="tab-pane">
+                        <div class="bids-container">
+                            <div class="bids-section">
+                                <h2><i class="fas fa-paper-plane"></i> Bids Offered</h2>
+                                <div id="offered-bids-table-container" class="bids-table-container"></div>
+                            </div>
+                            <div class="bids-section">
+                                <h2><i class="fas fa-inbox"></i> Bids Received</h2>
+                                <div id="received-bids-table-container" class="bids-table-container"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="charts-tab" class="tab-pane">
+                        <div class="chart-container">
+                            <div class="chart-box">
+                                <h3>Portfolio Distribution</h3>
+                                <canvas id="holdings-chart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <h3>Profit & Loss</h3>
+                                <canvas id="pnl-chart"></canvas>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <aside class="right-panel">
+                <div class="trading-widget">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-exchange-alt"></i> Trade</h3>
+                    </div>
+                    
+                    <div class="widget-body">
+                        <form id="trade-form" class="trade-form">
+                            <div class="form-group">
+                                <label for="team-number">Team Number</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-users"></i>
+                                    <select id="team-number" required>
+                                        <option value="" disabled selected>Select team number</option>
+                                        <option value="Team-1">Team-1</option>
+                                        <option value="Team-2">Team-2</option>
+                                        <option value="Team-3">Team-3</option>
+                                        <option value="Team-4">Team-4</option>
+                                        <option value="Team-5">Team-5</option>
+                                        <option value="Team-6">Team-6</option>
+                                        <option value="Team-7">Team-7</option>
+                                        <option value="Team-8">Team-8</option>
+                                        <option value="Team-9">Team-9</option>
+                                        <option value="Team-10">Team-10</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="order-type">Order Type</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-tags"></i>
+                                    <select id="order-type">
+                                        <option value="market">Market Order</option>
+                                        <option value="private">Private Order</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="stock-select">Stock</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <select id="stock-select"></select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group half-width">
+                                    <label for="stock-price">Price</label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-tag"></i>
+                                        <input type="text" id="stock-price" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group half-width">
+                                    <label for="quantity">Quantity</label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-calculator"></i>
+                                        <input type="number" id="quantity" min="1" required placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="total-price">Total</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <input type="text" id="total-price" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="status-select">Action</label>
+                                <div class="trade-actions">
+                                    <div class="action-toggle">
+                                        <input type="radio" id="buy-action" name="action" value="Buy" checked>
+                                        <label for="buy-action" class="buy-btn">Buy</label>
+                                        <input type="radio" id="sell-action" name="action" value="Sell">
+                                        <label for="sell-action" class="sell-btn">Sell</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="submit-trade buy">
+                                <i class="fas fa-arrow-up"></i> Place Order
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <footer class="terminal-footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>Powered By E-Cell</span>
+                </div>
+                <div class="footer-right">
+                    <span class="last-update">Last updated: <span id="update-time">Just now</span></span>
+                    <span class="copyright">&copy; 2025</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="private-order-dialog" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-lock"></i> Private Order</h2>
+                <span class="close-btn" id="close-private-order">&times;</span>
+            </div>
+            <form id="private-order-form" class="modal-form">
+                <div class="form-group">
+                    <label for="bid-team">Team</label>
+                    <select id="bid-team" required>
+                        <option value="" disabled selected>Select a team</option>
+                        <option value="Team-1">Team-1</option>
+                        <option value="Team-2">Team-2</option>
+                        <option value="Team-3">Team-3</option>
+                        <option value="Team-4">Team-4</option>
+                        <option value="Team-5">Team-5</option>
+                        <option value="Team-6">Team-6</option>
+                        <option value="Team-7">Team-7</option>
+                        <option value="Team-8">Team-8</option>
+                        <option value="Team-9">Team-9</option>
+                        <option value="Team-10">Team-10</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="private-stock">Stock</label>
+                    <select id="private-stock"></select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="private-price">Price per unit</label>
+                        <input type="number" id="private-price" required placeholder="Enter price" min="0.01" step="0.01">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="private-quantity">Quantity</label>
+                        <input type="number" id="private-quantity" required placeholder="Enter quantity" min="1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="private-total">Total Amount</label>
+                    <input type="text" id="private-total" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label>Action</label>
+                    <div class="trade-actions">
+                        <div class="action-toggle">
+                            <input type="radio" id="private-buy-action" name="private-action" value="Buy" checked>
+                            <label for="private-buy-action" class="buy-btn">Buy</label>
+                            <input type="radio" id="private-sell-action" name="private-action" value="Sell">
+                            <label for="private-sell-action" class="sell-btn">Sell</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Place Bid
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
